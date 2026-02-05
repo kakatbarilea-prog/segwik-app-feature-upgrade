@@ -213,7 +213,7 @@
     margin:0;
     font:inherit;
     color:var(--accent);
-    font-weight:800;
+    font-weight:700;
     font-size:12px;
     cursor:pointer;
     text-decoration:underline;
@@ -240,7 +240,7 @@
     padding:12px 12px;
   }
   .featurePanelTitle{
-    font-weight:800;
+    font-weight:700;
     color:#0b1b2b;
     font-size:13px;
   }
@@ -339,16 +339,48 @@
   .radio{
     width:22px;height:22px;border-radius:999px;
     border:2px solid #cbd5e1;
-    display:grid;place-items:center;
+    display:grid;
+    place-items:center;
     flex:0 0 auto;
     margin-top:2px;
+    background:#fff;
+    position:relative;
   }
-  .bucket.active .radio{border-color:rgba(44,125,191,.65)}
+
+  /* default: no dot */
   .radio .dot{
     width:10px;height:10px;border-radius:999px;
     background:transparent;
   }
+
+  /* existing behavior (Grow selection) */
+  .bucket.active .radio{border-color:rgba(44,125,191,.65)}
   .bucket.active .radio .dot{background:var(--accent)}
+
+  /* PAYMENT METHOD: show green check when selected */
+  .method.active .radio{
+    border-color:rgba(34,197,94,.85);
+    background:rgba(34,197,94,.10);
+  }
+  .method.active .radio .dot{
+    width:14px;
+    height:14px;
+    border-radius:0;
+    background:transparent;
+    position:relative;
+  }
+  .method.active .radio .dot:before{
+    content:"";
+    position:absolute;
+    width:8px;
+    height:4px;
+    border-left:2.6px solid #16a34a;
+    border-bottom:2.6px solid #16a34a;
+    transform:rotate(-45deg);
+    left:2px;
+    top:4px;
+  }
+
 
 .featureList{
   margin-top:12px;
@@ -496,7 +528,7 @@
     margin:0;
     font:inherit;
     color:var(--accent);
-    font-weight:800;
+    font-weight:700;
     font-size:12px;
     cursor:pointer;
     text-decoration:underline;
@@ -1130,6 +1162,111 @@
     font-weight:600;
     line-height:1.35;
   }
+  .inlineInfo .t{
+    font-size:12px;
+    color:#556274;
+    font-weight:600;
+    line-height:1.35;
+  }
+
+  /* ======================================================
+     SUCCESS SCREEN: BLUR + PAYMENT CONFIRMED POPUP
+  ====================================================== */
+  .blurred{
+    filter:blur(7px);
+    transform:translateZ(0);
+  }
+
+  .payConfirmOverlay{
+    position:absolute;
+    inset:0;
+    background:rgba(11,27,43,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:14px;
+    z-index:40;
+  }
+  .payConfirmOverlay.show{display:flex}
+
+  .payConfirmCard{
+    width:100%;
+    max-width:360px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:22px;
+    box-shadow:0 18px 40px rgba(0,0,0,.18);
+    padding:16px;
+  }
+  .payConfirmTitle{
+    font-size:16px;
+    font-weight:700;
+    color:#0b1b2b;
+    line-height:1.2;
+  }
+  .payConfirmSub{
+    margin-top:8px;
+    font-size:13px;
+    font-weight:650;
+    color:#556274;
+    line-height:1.4;
+  }
+
+  /* Success summary */
+  .successHero{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:22px;
+    box-shadow:var(--shadow2);
+    padding:16px;
+    margin:2px 0 12px;
+  }
+  .successHeroTitle{
+    font-size:15px;
+    font-weight:700;
+    color:#0b1b2b;
+    line-height:1.2;
+  }
+  .successHeroSub{
+    margin-top:8px;
+    font-size:12px;
+    font-weight:650;
+    color:#64748b;
+    line-height:1.35;
+  }
+
+  .creditGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:12px;
+  }
+  .creditGrid.oneCol{grid-template-columns:1fr}
+  .creditBox{
+    border:1px solid rgba(44,125,191,.22);
+    border-radius:16px;
+    padding:10px 10px;
+    background:rgba(44,125,191,.06);
+    box-shadow:0 10px 22px rgba(15,45,86,.06);
+  }
+  .creditBox .k{font-size:11px;color:#8a94a6;font-weight:700}
+  .creditBox .v{margin-top:4px;font-size:14px;color:#111;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .successListWrap{
+    border:1px solid rgba(44,125,191,.18);
+    background:rgba(44,125,191,.06);
+    border-radius:16px;
+    padding:12px;
+    margin-top:10px;
+
+    max-height:44vh;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .successListWrap::-webkit-scrollbar{width:10px}
+  .successListWrap::-webkit-scrollbar-track{background:rgba(0,0,0,.06);border-radius:999px}
+  .successListWrap::-webkit-scrollbar-thumb{background:rgba(44,125,191,.35);border-radius:999px}
+  .successListWrap::-webkit-scrollbar-thumb:hover{background:rgba(44,125,191,.50)}
 
 </style>
 </head>
@@ -1747,7 +1884,7 @@
               <div class="inlineInfo">
                 <div class="i" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></div>
                 <div class="t">
-                  Your card details are protected with encryption and tokenization. We store a secure payment method for future charges and renewals — not your full card number.
+                  Your card details are protected with encryption. We store a secure payment method for future charges and renewals — not your full card number.
                 </div>
               </div>
             </div>
@@ -1933,28 +2070,91 @@
         </div>
       </div>
 
-      <!-- Screen 12: Confirmation -->
+      <!-- Screen 12: Success summary (post-payment) -->
       <div class="screen off-right hidden" id="screen-success" aria-hidden="true">
         <div class="topbar">
           <div class="backBtn" onclick="navBack()">
             <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
           </div>
-          <div class="title">Confirmation</div>
+          <div class="title">Your access</div>
         </div>
 
-        <div class="content">
-          <div class="centerStage">
-            <div class="ctaCard">
-              <div class="ctaTitle">Payment confirmed</div>
-              <div class="ctaSub">Your payment method has been saved and your upgrade will apply immediately.</div>
-              <button class="primaryBtn" style="margin-top:14px;" onclick="finalizeUpgradeAfterPayment()">
+        <div class="content" style="position:relative;">
+          <!-- This is what gets blurred behind the popup -->
+          <div id="successBody">
+            <div class="successHero" style="margin-top:2px;">
+              <div class="successHeroTitle">Your access is active</div>
+              <div class="successHeroSub">Here's a summary of what’s now enabled on your account.</div>
+            </div>
+
+            <div class="card" style="margin-top:10px;">
+              <div class="sectionTitle" style="margin-top:0;"><span class="dot"></span>Access summary</div>
+
+              <div class="summaryGrid">
+                <div class="k">Subscription</div>
+                <div class="v" id="succPlan">—</div>
+
+                <div class="k">Pro</div>
+                <div class="v" id="succPro">Off</div>
+
+                <div class="k">Telecommunications credits</div>
+                <div class="v" id="succTelecom">—</div>
+
+                <div class="k">Active connections credits</div>
+                <div class="v" id="succConnections">—</div>
+
+                <div class="k">User credits</div>
+                <div class="v" id="succUsers">—</div>
+
+                <div class="k">Onboarding package</div>
+                <div class="v" id="succOnboarding">—</div>
+              </div>
+
+              <div class="divider"></div>
+
+              <div class="sectionTitle" style="margin:0 0 8px;"><span class="dot"></span>Included features & credits</div>
+              <div class="successListWrap" id="succIncludedList"></div>
+
+              <div class="divider"></div>
+
+              <div class="sectionTitle" style="margin:0 0 8px;"><span class="dot"></span>Charges</div>
+
+
+              <div class="summaryGrid">
+                <div class="k">Paid today</div>
+                <div class="v" id="succPaidToday">$0</div>
+
+                <div class="k">Recurring (monthly)</div>
+                <div class="v" id="succRecurring">$0</div>
+
+                <div class="k">One-time onboarding</div>
+                <div class="v" id="succOnetime">$0</div>
+              </div>
+
+              <button class="primaryBtn" style="margin-top:12px;" onclick="hardResetToEntry()">
+                Go back from where I came
+              </button>
+              <button class="secondaryBtn" style="margin-top:12px;" onclick="window.location.href='https://segwik.com';">
+                Go To Onboarding & Support Dashboard
+              </button>
+
+            </div>
+          </div>
+
+
+          <!-- Payment-confirmed popup (shows first, blurs background) -->
+          <div class="payConfirmOverlay" id="payConfirmOverlay" aria-hidden="true">
+            <div class="payConfirmCard">
+              <div class="payConfirmTitle">Payment confirmed</div>
+              <div class="payConfirmSub">Your payment was successful. Your access is now active.</div>
+              <button class="primaryBtn" style="margin-top:12px;" onclick="closePaymentConfirmed()">
                 Done
               </button>
-              <div class="microHint">You can manage payment methods anytime in Settings.</div>
             </div>
           </div>
         </div>
       </div>
+
 
 
     </div>
@@ -2111,9 +2311,18 @@
     setTimeout(()=>{
       btn.classList.remove("loading");
       btn.disabled = false;
+
+      // Go to the success summary screen
       navTo("screen-success");
+
+      // Render summary + show the confirmation popup first
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        renderSuccessSummary();
+        openPaymentConfirmed();
+      }));
     }, 2000);
   }
+
 
   const state = {
     featureName: "Advanced Automations",
@@ -2532,8 +2741,19 @@
     if(id === "screen-summary"){
       renderSummary();
     }
+    if(id === "screen-success"){
+      // Always keep the summary in sync if they revisit this screen
+      renderSuccessSummary();
+
+      // If the popup is still open for any reason, keep blur consistent
+      const overlay = byId("payConfirmOverlay");
+      const body = byId("successBody");
+      const open = overlay && overlay.classList.contains("show");
+      if(body) body.classList.toggle("blurred", !!open);
+    }
     _navTo(id);
   };
+
 
   /* ---------- Confirm ---------- */
     /* ---------- Summary details modal ---------- */
@@ -2636,6 +2856,21 @@
     // Default: bullets only
     return '<ul class="sumModalList">' + rows.map(t=>'<li>'+escapeHTML(t)+'</li>').join("") + '</ul>';
   }
+function extractEntitlementLines(containerId){
+  const el = document.getElementById(containerId);
+  if(!el) return [];
+
+  const rows = Array.from(el.querySelectorAll(".feat")).map(row=>{
+    const clone = row.cloneNode(true);
+    const icon = clone.querySelector(".check");
+    if(icon) icon.remove();
+    const text = (clone.textContent || "").replace(/\s+/g," ").trim();
+    return text;
+  }).filter(Boolean);
+
+  // Remove the “Everything in ... PLUS:” header line (not an entitlement)
+  return rows.filter(t => !/^Everything in\b/i.test(t) && !/PLUS:\s*$/i.test(t));
+}
 
 
   function escapeHTML(str){
@@ -2698,12 +2933,92 @@
     setOnboardingUI("growth");
 
   }
-  function finalizeUpgradeAfterPayment(){
-    // Apply upgrade only after payment completion screen
+  function openPaymentConfirmed(){
+    const overlay = byId("payConfirmOverlay");
+    const body = byId("successBody");
+    if(overlay){
+      overlay.classList.add("show");
+      overlay.setAttribute("aria-hidden","false");
+    }
+    if(body){
+      body.classList.add("blurred");
+    }
+  }
+
+  function closePaymentConfirmed(){
+    const overlay = byId("payConfirmOverlay");
+    const body = byId("successBody");
+    if(overlay){
+      overlay.classList.remove("show");
+      overlay.setAttribute("aria-hidden","true");
+    }
+    if(body){
+      body.classList.remove("blurred");
+    }
+  }
+
+  function renderSuccessSummary(){
+    // Apply upgrade state (do NOT reset screens)
     state.currentPlan = state.selectedPlan;
 
-    toast("Upgrade applied");
-    hardResetToEntry();
+    // Labels
+    const plan = state.selectedPlan || "—";
+    const pro = state.proEnabled ? "Enabled" : "Off";
+
+    const obLabel =
+      (state.onboarding === "none") ? "None" :
+      (state.onboarding === "launch") ? "Segwik Launch Experience" :
+      (state.onboarding === "growth") ? "Segwik Growth Accelerator" :
+      "Segwik Pro White-Glove Setup";
+
+    // Credits (simple summary based on your plan lists)
+    // NOTE: Pro values override Grow values for telecom/user credits in this summary.
+    const telecom = state.proEnabled ? 250 : 100;
+    const connections = 500;
+    const users = state.proEnabled ? 15 : 5;
+
+    const recurring = computeRecurring();
+    const onetime = state.prices.onboarding[state.onboarding] || 0;
+
+    // Paid today = what checkout flow calculated (fallback to recurring+onetime)
+    const paidToday = (typeof checkout.totalDueToday === "number")
+      ? checkout.totalDueToday
+      : (recurring + onetime);
+
+    // Fill UI
+    const elPlan = byId("succPlan"); if(elPlan) elPlan.textContent = plan;
+    const elPro = byId("succPro"); if(elPro) elPro.textContent = pro;
+
+    const elTele = byId("succTelecom"); if(elTele) elTele.textContent = telecom + " Credits";
+    const elConn = byId("succConnections"); if(elConn) elConn.textContent = connections + " Credits";
+    const elUsers = byId("succUsers"); if(elUsers) elUsers.textContent = users + " Credits";
+
+    const elOb = byId("succOnboarding"); if(elOb) elOb.textContent = obLabel;
+
+    const elPaid = byId("succPaidToday"); if(elPaid) elPaid.textContent = money(paidToday);
+    const elRec = byId("succRecurring"); if(elRec) elRec.textContent = money(recurring);
+    const elOne = byId("succOnetime"); if(elOne) elOne.textContent = money(onetime);
+// Included features & credits (plan entitlements only — NOT onboarding)
+const wrap = byId("succIncludedList");
+if(wrap){
+  const lines = [];
+
+  if(state.selectedPlan === "Grow"){
+    lines.push(...extractEntitlementLines("growFeaturesList"));
+  }
+
+  if(state.proEnabled){
+    lines.push(...extractEntitlementLines("proFeaturesList"));
+  }
+
+  if(lines.length === 0){
+    wrap.innerHTML = '<ul class="sumModalList"><li>No included items found.</li></ul>';
+  } else {
+    wrap.innerHTML = '<ul class="sumModalList">' + lines.map(t=>'<li>'+escapeHTML(t)+'</li>').join("") + '</ul>';
+  }
+}
+
+
   }
 
   /* ---------- Init ---------- */
