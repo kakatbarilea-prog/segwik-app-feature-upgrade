@@ -5,6 +5,7 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Segwik Upgrade Flow</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
   :root{
@@ -890,6 +891,245 @@
   #screen-summary .summaryGrid .v#sumOnetime{
     color:var(--priceRed) !important;
   }
+  /* ======================================================
+     PAYMENT METHOD FLOW (ADD-ON)
+     - methods + card form + loader + security note
+  ====================================================== */
+
+  /* Button loader (inline, 2s fake processing) */
+  .primaryBtn{position:relative}
+  .primaryBtn.loading{cursor:not-allowed;opacity:.92}
+  .primaryBtn.loading .btnText{opacity:0}
+  .primaryBtn.loading .btnSpinner{opacity:1}
+  .btnSpinner{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:18px;
+    height:18px;
+    border-radius:999px;
+    border:2px solid rgba(255,255,255,.45);
+    border-top-color:#ffffff;
+    opacity:0;
+    animation:spin .85s linear infinite;
+    pointer-events:none;
+  }
+  @keyframes spin{
+    to{transform:translate(-50%,-50%) rotate(360deg)}
+  }
+
+  /* Payment methods */
+  .method{
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:#fff;
+    box-shadow:var(--shadow3);
+    padding:14px;
+    margin:10px 0;
+    cursor:pointer;
+    position:relative;
+  }
+  .method:hover{border-color:rgba(44,125,191,.32)}
+  .method.active{
+    border-color:rgba(44,125,191,.65);
+    box-shadow:0 14px 26px rgba(44,125,191,.16);
+  }
+  .methodTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .methodTitle{font-size:14px;font-weight:700;color:#0b1b2b;line-height:1.2}
+  .methodSub{margin-top:6px;font-size:12px;color:#5b6776;font-weight:600;line-height:1.35}
+
+  /* Security note */
+  .securityNote{
+    margin-top:12px;
+    border:1px solid rgba(44,125,191,.18);
+    background:rgba(44,125,191,.06);
+    border-radius:16px;
+    padding:12px;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .secIcon{
+    width:34px;height:34px;
+    border-radius:12px;
+    display:grid;place-items:center;
+    background:rgba(44,125,191,.12);
+    border:1px solid rgba(44,125,191,.20);
+    color:var(--accent);
+    flex:0 0 auto;
+  }
+  .secTitle{font-weight:700;color:#0b1b2b;font-size:13px;line-height:1.2}
+  .secText{margin-top:5px;color:#5b6776;font-size:12px;font-weight:600;line-height:1.35}
+
+  /* Credit card form */
+  .payShell{
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:12px;
+    background:#fff;
+    box-shadow:0 10px 22px rgba(15,45,86,.05);
+  }
+  .row{display:flex;gap:10px}
+  .row + .row{margin-top:10px}
+  .col{flex:1;min-width:0}
+
+  .label{
+    font-size:11px;
+    color:#8a94a6;
+    font-weight:700;
+    letter-spacing:.2px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .ccField{
+    width:100%;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:14px;
+    padding:12px 12px;
+    font-size:14px;
+    font-weight:500;
+    outline:none;
+  }
+  .ccField:focus{
+    border-color:rgba(44,125,191,.55);
+    box-shadow:0 0 0 3px rgba(44,125,191,.10);
+  }
+
+  .ccNumberWrap{position:relative}
+  .brandStrip{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    gap:8px;
+    align-items:center;
+    pointer-events:none;
+  }
+
+  /* Card brand logos (pure CSS) */
+  .brandLogo{
+    width:34px;
+    height:22px;
+    border-radius:6px;
+    border:1px solid rgba(15,45,86,.12);
+    background:#ffffff;
+    box-shadow:0 6px 14px rgba(15,45,86,.08);
+    position:relative;
+    overflow:hidden;
+  }
+  .brandLogo.visa{
+    background:linear-gradient(135deg,#0b2a6f 0%, #123a92 55%, #0b2a6f 100%);
+  }
+  .brandLogo.visa:after{
+    content:"VISA";
+    position:absolute;
+    right:6px;
+    bottom:4px;
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:.6px;
+    color:#ffffff;
+    opacity:.95;
+  }
+  .brandLogo.mc{background:#ffffff}
+  .brandLogo.mc:before,
+  .brandLogo.mc:after{
+    content:"";
+    position:absolute;
+    top:50%;
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    transform:translateY(-50%);
+    opacity:.96;
+  }
+  .brandLogo.mc:before{left:9px;background:#eb001b}
+  .brandLogo.mc:after{left:15px;background:#f79e1b;mix-blend-mode:multiply}
+
+  .brandLogo.amex{
+    background:linear-gradient(135deg,#0b8bbd 0%, #0a6fa1 55%, #0b8bbd 100%);
+  }
+  .brandLogo.amex:after{
+    content:"AMEX";
+    position:absolute;
+    left:6px;
+    bottom:4px;
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:#ffffff;
+    opacity:.95;
+  }
+  .brandLogo.amex:before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.08) 0px,
+      rgba(255,255,255,.08) 2px,
+      rgba(255,255,255,0) 2px,
+      rgba(255,255,255,0) 4px
+    );
+    opacity:.55;
+  }
+
+  .brandLogo.disc{background:#ffffff}
+  .brandLogo.disc:before{
+    content:"";
+    position:absolute;
+    left:-6px;
+    top:50%;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    transform:translateY(-50%);
+    background:radial-gradient(circle at 45% 45%, #ff9a2a 0%, #ff6a00 60%, rgba(255,106,0,0) 62%);
+    opacity:.95;
+  }
+  .brandLogo.disc:after{
+    content:"DISC";
+    position:absolute;
+    right:6px;
+    bottom:4px;
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:.45px;
+    color:#111827;
+    opacity:.85;
+  }
+
+  .inlineInfo{
+    margin-top:10px;
+    padding:10px 10px;
+    border-radius:14px;
+    background:rgba(15,45,86,.04);
+    border:1px solid rgba(15,45,86,.08);
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .inlineInfo .i{
+    width:28px;height:28px;border-radius:10px;
+    background:rgba(44,125,191,.10);
+    border:1px solid rgba(44,125,191,.18);
+    color:var(--accent);
+    display:grid;place-items:center;
+    flex:0 0 auto;
+    font-size:13px;
+  }
+  .inlineInfo .t{
+    font-size:12px;
+    color:#556274;
+    font-weight:600;
+    line-height:1.35;
+  }
 
 </style>
 </head>
@@ -1346,6 +1586,377 @@
         </div>
       </div>
 
+      <!-- Screen 6: Choose payment method (after Confirm upgrade) -->
+      <div class="screen off-right hidden" id="screen-method" aria-hidden="true">
+        <div class="topbar">
+          <div class="backBtn" onclick="navBack()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="title">Choose Payment Method</div>
+        </div>
+
+        <div class="content">
+          <div class="heroCard">
+            <div style="font-size:15px;font-weight:700;color:#0b1b2b;">Select a payment option</div>
+            <div class="mutedLine" style="margin-top:8px;">Choose how you’d like to pay. You’ll enter details on the next step.</div>
+
+            <div class="miniGrid oneCol">
+              <div class="miniStat">
+                <div class="k">Total due today</div>
+                <div class="v" id="sumTotal">$0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sectionTitle" style="margin-top:8px;"><span class="dot"></span>Payment methods</div>
+
+          <div class="method" id="m-card" onclick="selectMethod('card')">
+            <div class="methodTop">
+              <div style="min-width:0;">
+                <div class="methodTitle">Credit / Debit Card</div>
+                <div class="methodSub">Visa, Mastercard, American Express, Discover.</div>
+              </div>
+              <div class="radio" aria-hidden="true"><div class="dot"></div></div>
+            </div>
+          </div>
+
+          <div class="method" id="m-apple" onclick="selectMethod('apple')">
+            <div class="methodTop">
+              <div style="min-width:0;">
+                <div class="methodTitle">Apple Pay</div>
+                <div class="methodSub">Use Apple Pay on supported devices.</div>
+              </div>
+              <div class="radio" aria-hidden="true"><div class="dot"></div></div>
+            </div>
+          </div>
+
+          <div class="method" id="m-google" onclick="selectMethod('google')">
+            <div class="methodTop">
+              <div style="min-width:0;">
+                <div class="methodTitle">Google Pay</div>
+                <div class="methodSub">Use Google Pay on supported devices.</div>
+              </div>
+              <div class="radio" aria-hidden="true"><div class="dot"></div></div>
+            </div>
+          </div>
+
+          <div class="method" id="m-paypal" onclick="selectMethod('paypal')">
+            <div class="methodTop">
+              <div style="min-width:0;">
+                <div class="methodTitle">PayPal</div>
+                <div class="methodSub">You may be redirected to complete payment.</div>
+              </div>
+              <div class="radio" aria-hidden="true"><div class="dot"></div></div>
+            </div>
+          </div>
+
+          <div class="method" id="m-ach" onclick="selectMethod('ach')">
+            <div class="methodTop">
+              <div style="min-width:0;">
+                <div class="methodTitle">Bank transfer (ACH)</div>
+                <div class="methodSub">Common for business payments and invoices.</div>
+              </div>
+              <div class="radio" aria-hidden="true"><div class="dot"></div></div>
+            </div>
+          </div>
+
+          <button class="primaryBtn" id="methodContinue" onclick="goToSelected()" disabled>Continue</button>
+          <button class="secondaryBtn" onclick="navBack()">Back</button>
+
+          <div class="securityNote" role="note" aria-label="Security note">
+            <div class="secIcon" aria-hidden="true">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <div style="min-width:0;">
+              <div class="secTitle">Secure payment</div>
+              <div class="secText">Payment details are encrypted and stored securely.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 7: Card -->
+      <div class="screen off-right hidden" id="screen-card" aria-hidden="true">
+        <div class="topbar">
+          <div class="backBtn" onclick="navBack()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="title">Pay by Card</div>
+        </div>
+
+        <div class="content">
+          <div class="heroCard">
+            <div style="font-size:15px;font-weight:700;color:#0b1b2b;">Enter card details</div>
+            <div class="mutedLine" style="margin-top:8px;">Review your information and confirm payment.</div>
+
+            <div class="miniGrid oneCol" style="margin-top:12px;">
+              <div class="miniStat">
+                <div class="k">Due today</div>
+                <div class="v" id="cardDue">$0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="sectionTitle" style="margin-top:0;"><span class="dot"></span>Card information</div>
+
+            <div class="payShell">
+              <div class="label" style="margin-bottom:6px;"><span>Card number</span></div>
+              <div class="ccNumberWrap">
+                <input class="ccField" id="ccNumber" inputmode="numeric" autocomplete="cc-number" placeholder="1234 1234 1234 1234" />
+                <div class="brandStrip" aria-hidden="true">
+                  <div class="brandLogo visa" title="Visa"></div>
+                  <div class="brandLogo mc" title="Mastercard"></div>
+                  <div class="brandLogo amex" title="American Express"></div>
+                  <div class="brandLogo disc" title="Discover"></div>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top:10px;">
+                <div class="col">
+                  <div class="label" style="margin-bottom:6px;"><span>Expiration</span></div>
+                  <input class="ccField" id="ccExp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" />
+                </div>
+                <div class="col">
+                  <div class="label" style="margin-bottom:6px;"><span>Security code</span></div>
+                  <input class="ccField" id="ccCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <div class="label" style="margin-bottom:6px;"><span>Name on card</span></div>
+                  <input class="ccField" id="ccName" autocomplete="cc-name" placeholder="Name" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <div class="label" style="margin-bottom:6px;"><span>Billing ZIP / Postal code</span></div>
+                  <input class="ccField" id="ccZip" inputmode="numeric" autocomplete="postal-code" placeholder="ZIP / Postal code" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <div class="label" style="margin-bottom:6px;"><span>Receipt email</span></div>
+                  <input class="ccField" id="ccEmail" inputmode="email" autocomplete="email" placeholder="you@company.com" />
+                </div>
+              </div>
+
+              <div class="inlineInfo">
+                <div class="i" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="t">
+                  Your card details are protected with encryption and tokenization. We store a secure payment method for future charges and renewals — not your full card number.
+                </div>
+              </div>
+            </div>
+
+            <button class="primaryBtn" id="cardPayBtn" onclick="fakePayToSuccess('cardPayBtn')">
+              <span class="btnText">Pay now</span>
+              <span class="btnSpinner" aria-hidden="true"></span>
+            </button>
+            <button class="secondaryBtn" onclick="navBack()">Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 8: Apple Pay -->
+      <div class="screen off-right hidden" id="screen-apple" aria-hidden="true">
+        <div class="topbar">
+          <div class="backBtn" onclick="navBack()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="title">Apple Pay</div>
+        </div>
+
+        <div class="content">
+          <div class="heroCard">
+            <div style="font-size:15px;font-weight:700;color:#0b1b2b;">Apple Pay</div>
+            <div class="mutedLine" style="margin-top:8px;">Use Apple Pay on supported devices.</div>
+            <div class="miniGrid oneCol" style="margin-top:12px;">
+              <div class="miniStat">
+                <div class="k">Due today</div>
+                <div class="v" id="appleDue">$0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="sectionTitle" style="margin-top:0;"><span class="dot"></span>Wallet checkout</div>
+            <div class="mutedLine">When enabled, Segwik will present the Apple Pay sheet during checkout.</div>
+
+            <button class="primaryBtn" id="applePayBtn" onclick="fakePayToSuccess('applePayBtn')">
+              <span class="btnText">Pay with Apple Pay</span>
+              <span class="btnSpinner" aria-hidden="true"></span>
+            </button>
+            <button class="secondaryBtn" onclick="navBack()">Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 9: Google Pay -->
+      <div class="screen off-right hidden" id="screen-google" aria-hidden="true">
+        <div class="topbar">
+          <div class="backBtn" onclick="navBack()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="title">Google Pay</div>
+        </div>
+
+        <div class="content">
+          <div class="heroCard">
+            <div style="font-size:15px;font-weight:700;color:#0b1b2b;">Google Pay</div>
+            <div class="mutedLine" style="margin-top:8px;">Use Google Pay on supported devices.</div>
+            <div class="miniGrid oneCol" style="margin-top:12px;">
+              <div class="miniStat">
+                <div class="k">Due today</div>
+                <div class="v" id="googleDue">$0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="sectionTitle" style="margin-top:0;"><span class="dot"></span>Wallet checkout</div>
+            <div class="mutedLine">When enabled, Segwik will present the Google Pay sheet during checkout.</div>
+
+            <button class="primaryBtn" id="googlePayBtn" onclick="fakePayToSuccess('googlePayBtn')">
+              <span class="btnText">Pay with Google Pay</span>
+              <span class="btnSpinner" aria-hidden="true"></span>
+            </button>
+            <button class="secondaryBtn" onclick="navBack()">Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 10: PayPal -->
+      <div class="screen off-right hidden" id="screen-paypal" aria-hidden="true">
+        <div class="topbar">
+          <div class="backBtn" onclick="navBack()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="title">PayPal</div>
+        </div>
+
+        <div class="content">
+          <div class="heroCard">
+            <div style="font-size:15px;font-weight:700;color:#0b1b2b;">Pay with PayPal</div>
+            <div class="mutedLine" style="margin-top:8px;">You’ll typically be redirected to PayPal to approve the payment and then returned to Segwik.</div>
+            <div class="miniGrid oneCol" style="margin-top:12px;">
+              <div class="miniStat">
+                <div class="k">Due today</div>
+                <div class="v" id="paypalDue">$0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="sectionTitle" style="margin-top:0;"><span class="dot"></span>How it works</div>
+            <div class="mutedLine">
+              - Select PayPal to continue.<br>
+              - Segwik sends you to PayPal to sign in and approve.<br>
+              - PayPal returns you to Segwik after approval.
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="sectionTitle" style="margin:0 0 8px;"><span class="dot"></span>Optional: connect PayPal</div>
+            <div class="mutedLine">You can save PayPal as a checkout option for faster payment next time (availability depends on your plan and device).</div>
+
+            <button class="primaryBtn" id="paypalBtn" onclick="fakePayToSuccess('paypalBtn')">
+              <span class="btnText">Continue to PayPal</span>
+              <span class="btnSpinner" aria-hidden="true"></span>
+            </button>
+            <button class="secondaryBtn" onclick="navBack()">Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 11: ACH -->
+      <div class="screen off-right hidden" id="screen-ach" aria-hidden="true">
+        <div class="topbar">
+          <div class="backBtn" onclick="navBack()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="title">Bank transfer (ACH)</div>
+        </div>
+
+        <div class="content">
+          <div class="heroCard">
+            <div style="font-size:15px;font-weight:700;color:#0b1b2b;">Authorize a bank payment</div>
+            <div class="mutedLine" style="margin-top:8px;">ACH payments may take 1–3 business days to settle.</div>
+            <div class="miniGrid oneCol" style="margin-top:12px;">
+              <div class="miniStat">
+                <div class="k">Due today</div>
+                <div class="v" id="achDue">$0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="sectionTitle" style="margin-top:0;"><span class="dot"></span>Bank details</div>
+
+            <div class="payShell">
+              <div class="row">
+                <div class="col">
+                  <div class="label" style="margin-bottom:6px;"><span>Account holder</span></div>
+                  <input class="ccField" id="achName" placeholder="Name" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <div class="label" style="margin-bottom:6px;"><span>Routing number</span></div>
+                  <input class="ccField" id="achRouting" inputmode="numeric" placeholder="Routing number" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <div class="label" style="margin-bottom:6px;"><span>Account number</span></div>
+                  <input class="ccField" id="achAccount" inputmode="numeric" placeholder="Account number" />
+                </div>
+              </div>
+
+              <div class="inlineInfo">
+                <div class="i" aria-hidden="true"><i class="fa-solid fa-circle-info"></i></div>
+                <div class="t">ACH payments may take 1–3 business days to settle, depending on the processor and bank.</div>
+              </div>
+            </div>
+
+            <button class="primaryBtn" id="achAuthorizeBtn" onclick="fakePayToSuccess('achAuthorizeBtn')">
+              <span class="btnText">Authorize bank transfer</span>
+              <span class="btnSpinner" aria-hidden="true"></span>
+            </button>
+            <button class="secondaryBtn" onclick="navBack()">Back</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen 12: Confirmation -->
+      <div class="screen off-right hidden" id="screen-success" aria-hidden="true">
+        <div class="topbar">
+          <div class="backBtn" onclick="navBack()">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </div>
+          <div class="title">Confirmation</div>
+        </div>
+
+        <div class="content">
+          <div class="centerStage">
+            <div class="ctaCard">
+              <div class="ctaTitle">Payment confirmed</div>
+              <div class="ctaSub">Your payment method has been saved and your upgrade will apply immediately.</div>
+              <button class="primaryBtn" style="margin-top:14px;" onclick="finalizeUpgradeAfterPayment()">
+                Done
+              </button>
+              <div class="microHint">You can manage payment methods anytime in Settings.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
 
 
@@ -1422,6 +2033,88 @@
      - needsPlan: what tier is required (e.g., "Grow")
      - currentPlan: their current tier
   ------------------------ */
+    /* -----------------------
+     CHECKOUT STATE (ADD-ON)
+  ------------------------ */
+  const checkout = {
+    totalDueToday: 0,
+    selectedMethod: null
+  };
+
+  function money(n){
+    const x = Number(n || 0);
+    return "$" + x.toFixed(0);
+  }
+
+  function renderCheckoutTotals(){
+    const total = money(checkout.totalDueToday);
+
+    const sumTotal = byId("sumTotal");
+    if(sumTotal) sumTotal.textContent = total;
+
+    const ids = ["cardDue","appleDue","googleDue","paypalDue","achDue"];
+    ids.forEach(id=>{
+      const el = byId(id);
+      if(el) el.textContent = total;
+    });
+  }
+
+  function resetCheckoutUI(){
+    checkout.selectedMethod = null;
+
+    ["card","apple","google","paypal","ach"].forEach(x=>{
+      const el = byId("m-"+x);
+      if(el) el.classList.remove("active");
+    });
+
+    const btn = byId("methodContinue");
+    if(btn) btn.disabled = true;
+  }
+
+  function selectMethod(which){
+    checkout.selectedMethod = which;
+
+    ["card","apple","google","paypal","ach"].forEach(x=>{
+      const el = byId("m-"+x);
+      if(!el) return;
+      el.classList.toggle("active", x === which);
+    });
+
+    const btn = byId("methodContinue");
+    if(btn) btn.disabled = !checkout.selectedMethod;
+  }
+
+  function goToSelected(){
+    if(!checkout.selectedMethod){
+      toast("Choose a payment method.");
+      return;
+    }
+    const map = {
+      card: "screen-card",
+      apple: "screen-apple",
+      google: "screen-google",
+      paypal: "screen-paypal",
+      ach: "screen-ach"
+    };
+    navTo(map[checkout.selectedMethod] || "screen-card");
+  }
+
+  function fakePayToSuccess(btnId){
+    const btn = byId(btnId);
+    if(!btn) return;
+
+    if(btn.classList.contains("loading")) return;
+
+    btn.classList.add("loading");
+    btn.disabled = true;
+
+    setTimeout(()=>{
+      btn.classList.remove("loading");
+      btn.disabled = false;
+      navTo("screen-success");
+    }, 2000);
+  }
+
   const state = {
     featureName: "Advanced Automations",
     needsPlan: "Grow",
@@ -1785,10 +2478,6 @@
 
 
   /* ---------- Summary + pricing ---------- */
-  function money(n){
-    const x = Number(n || 0);
-    return "$" + x.toFixed(0);
-  }
 
   function computeRecurring(){
     let total = 0;
@@ -1957,7 +2646,6 @@
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#039;");
   }
-
   function confirmUpgrade(){
     const btn = document.getElementById("confirmBtn");
     const hint = document.getElementById("confirmHint");
@@ -1967,21 +2655,22 @@
       return;
     }
 
-    btn.disabled = true;
-    hint.textContent = "Applying your changes…";
+    // Total due today = first month + one-time onboarding
+    const recurring = computeRecurring();
+    const onetime = state.prices.onboarding[state.onboarding] || 0;
 
-    setTimeout(()=>{
-      // apply
-      state.currentPlan = state.selectedPlan;
+    checkout.totalDueToday = recurring + onetime;
 
-      btn.disabled = false;
-      hint.textContent = "Your changes apply immediately.";
-      toast("Upgrade applied");
+    // Prep checkout UI + totals
+    resetCheckoutUI();
+    renderCheckoutTotals();
 
-      // reset to entry for next use
-      hardResetToEntry();
-    }, 900);
+    // Move into payment flow
+    btn.disabled = false;
+    hint.textContent = "Choose a payment method to complete check-out.";
+    navTo("screen-method");
   }
+
 
   function hardResetToEntry(){
     // show entry, hide others
@@ -2008,6 +2697,13 @@
     setCapContinueState();
     setOnboardingUI("growth");
 
+  }
+  function finalizeUpgradeAfterPayment(){
+    // Apply upgrade only after payment completion screen
+    state.currentPlan = state.selectedPlan;
+
+    toast("Upgrade applied");
+    hardResetToEntry();
   }
 
   /* ---------- Init ---------- */
