@@ -14,6 +14,8 @@
     --muted:#7b8794;
     --line:#e7edf5;
     --accent:#2c7dbf;
+    --priceRed:#dc2626;
+
 
     --tab:#8b96a8;
     --tabActive:#2c7dbf;
@@ -186,7 +188,7 @@
   .lockNeed{
     margin-top:4px;
     font-size:15px;
-    font-weight:700;
+    font-weight:00;
     color:#0b1b2b;
     line-height:1.2;
   }
@@ -197,6 +199,69 @@
     gap:10px;
     margin-top:12px;
   }
+
+    .miniGrid.oneCol{
+    grid-template-columns:1fr;
+  }
+
+  .linkSmall{
+    appearance:none;
+    border:0;
+    background:transparent;
+    padding:0;
+    margin:0;
+    font:inherit;
+    color:var(--accent);
+    font-weight:800;
+    font-size:12px;
+    cursor:pointer;
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+
+  .planLinkBtn{
+    appearance:none;
+    border:0;
+    background:transparent;
+    padding:0;
+    margin:0;
+    font:inherit;
+    cursor:pointer;
+    font-weight:700;
+    color:#0b1b2b;
+    text-underline-offset:4px;
+  }
+
+  .featurePanel{
+    border:1px solid rgba(44,125,191,.18);
+    background:rgba(44,125,191,.06);
+    border-radius:18px;
+    padding:12px 12px;
+  }
+  .featurePanelTitle{
+    font-weight:800;
+    color:#0b1b2b;
+    font-size:13px;
+  }
+  .featurePanelSub{
+    margin-top:6px;
+    color:#64748b;
+    font-size:12px;
+    font-weight:700;
+    line-height:1.35;
+  }
+  .featureBullets{
+    margin:10px 0 0;
+    padding-left:18px;
+    color:#0b1b2b;
+    font-size:13px;
+    font-weight:650;
+    line-height:1.35;
+  }
+  .featureBullets li{
+    margin:6px 0;
+  }
+
   .miniStat{
     border:1px solid rgba(44,125,191,.22);
     border-radius:16px;
@@ -249,8 +314,8 @@
 
   /* Make Pro toggle + status feel intentional */
   .bucket.pro .toggle.on{
-    background:rgba(15,45,86,.22);
-    border-color:rgba(15,45,86,.22);
+    background:rgba(34,197,94,.28);
+    border-color:rgba(34,197,94,.55);
   }
 
   .bucketTop{
@@ -284,24 +349,47 @@
   }
   .bucket.active .radio .dot{background:var(--accent)}
 
-  .featureList{margin-top:12px;display:flex;flex-direction:column;gap:8px}
-  .feat{
-    display:flex;align-items:flex-start;gap:10px;
-    font-size:13px;
-    color:#0b1b2b;
-    font-weight:600;
-    line-height:1.25;
-  }
-  .check{
-    width:18px;height:18px;border-radius:6px;
-    border:1px solid rgba(44,125,191,.25);
-    background:rgba(44,125,191,.08);
-    color:var(--accent);
-    display:grid;place-items:center;
-    flex:0 0 auto;
-    margin-top:1px;
-  }
-  .check svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.featureList{
+  margin-top:12px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.feat{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  font-size:13px;
+  color:#0b1b2b;
+  font-weight:600;
+  line-height:1.4;
+  padding:2px 0;
+}
+
+.check{
+  width:18px;
+  height:18px;
+  border-radius:6px;
+  border:1px solid rgba(44,125,191,.25);
+  background:rgba(44,125,191,.08);
+  color:var(--accent);
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  margin-top:1px;
+}
+
+.check svg{
+  width:14px;
+  height:14px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
 
   .addRow{
     margin-top:10px;
@@ -329,9 +417,10 @@
     transition:left .18s ease;
   }
   .toggle.on{
-    background:rgba(44,125,191,.32);
-    border-color:rgba(44,125,191,.32);
+    background:rgba(34,197,94,.28);
+    border-color:rgba(34,197,94,.55);
   }
+
   .toggle.on:after{left:21px}
 
   /* Onboarding */
@@ -343,11 +432,39 @@
     padding:14px;
     margin:10px 0;
     cursor:pointer;
+    position:relative;
   }
+
+  /* Remove radio circles ONLY inside onboarding cards */
+  .choiceCard .radio{display:none !important;}
+
+  /* Make selection visually obvious (NO extra text added) */
   .choiceCard.active{
-    border-color:rgba(44,125,191,.55);
-    box-shadow:0 14px 26px rgba(44,125,191,.16);
+    border-color:rgba(44,125,191,.85);
+    box-shadow:
+      0 18px 38px rgba(44,125,191,.22),
+      0 10px 26px rgba(15,45,86,.08);
+    outline-offset:3px;
+    background:linear-gradient(180deg, rgba(44,125,191,.06), #fff);
   }
+
+  /* Disabled onboarding option */
+  .choiceCard.disabled{
+    opacity:.55;
+    filter:grayscale(1);
+    cursor:not-allowed;
+  }
+  .choiceCard.disabled:hover{
+    border-color:var(--line);
+  }
+  /* Safety: if it ever gets .active, keep it visually normal */
+  .choiceCard.disabled.active{
+    border-color:var(--line);
+    box-shadow:var(--shadow3);
+    background:#fff;
+  }
+
+
   .choiceTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
   .choiceTitle{font-weight:700;font-size:14px;color:#0b1b2b;line-height:1.2}
   .choiceSub{margin-top:6px;font-weight:600;font-size:12px;color:#5b6776;line-height:1.35}
@@ -362,6 +479,125 @@
     white-space:nowrap;
     flex:0 0 auto;
   }
+  /* Onboarding (collapsible features) */
+  .obMetaRow{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:10px;
+  }
+  .obToggleBtn{
+    appearance:none;
+    border:0;
+    background:transparent;
+    padding:0;
+    margin:0;
+    font:inherit;
+    color:var(--accent);
+    font-weight:800;
+    font-size:12px;
+    cursor:pointer;
+    text-decoration:underline;
+    text-underline-offset:3px;
+    white-space:nowrap;
+  }
+  .obToggleBtn:active{opacity:.85}
+
+
+  .obFeatures{
+    display:none;
+    margin-top:0;
+  }
+
+
+  /* Skip onboarding (highlighted) */
+  .skipCard{
+    border:2px dashed rgba(44,125,191,.40);
+    background:rgba(44,125,191,.06);
+    box-shadow:0 14px 26px rgba(44,125,191,.10);
+  }
+
+  .skipBtn{
+    width:100%;
+    text-align:left;
+    border:2px dashed rgba(44,125,191,.40);
+    background:rgba(44,125,191,.06);
+    box-shadow:0 14px 26px rgba(44,125,191,.10);
+    border-radius:20px;
+    padding:14px;
+    cursor:pointer;
+    font:inherit;
+  }
+  .skipBtn:active{opacity:.92}
+  .skipBtn .skipTitle{display:block}
+  .skipBtn .skipSub{display:block}
+
+  .skipTitle{
+    font-weight:700;
+    font-size:14px;
+    color:#0b1b2b;
+    line-height:1.25;
+  }
+  .skipSub{
+    margin-top:6px;
+    font-weight:700;
+    font-size:12px;
+    color:#546174;
+    line-height:1.35;
+  }
+
+  /* Friendly confirmation modal */
+  .modalOverlay{
+    position:absolute;
+    inset:0;
+    background:rgba(11,27,43,.55);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    padding:12px;
+    z-index:20;
+  }
+  .modalOverlay.show{display:flex}
+
+  .modalCard{
+    width:100%;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:22px;
+    box-shadow:0 18px 40px rgba(0,0,0,.18);
+    padding:16px;
+  }
+  .modalTitle{
+    font-size:15px;
+    font-weight:700;
+    color:#0b1b2b;
+    line-height:1.25;
+  }
+  .modalSub{
+    margin-top:8px;
+    font-size:13px;
+    font-weight:650;
+    color:#556274;
+    line-height:1.4;
+  }
+  .modalOptions{
+    margin-top:12px;
+    border:1px solid rgba(44,125,191,.18);
+    background:rgba(44,125,191,.06);
+    border-radius:16px;
+    padding:12px;
+  }
+  .modalOption{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    font-size:13px;
+    font-weight:650;
+    color:#0b1b2b;
+    line-height:1.35;
+    margin:8px 0;
+  }
 
   /* Summary */
   .summaryGrid{
@@ -374,6 +610,8 @@
     margin-top:10px;
   }
   .summaryGrid .k{color:#64748b;font-weight:700}
+  .summaryGrid .k.emph{color:#0b1b2b;font-weight:700}
+
   .summaryGrid .v{color:#0b1b2b;font-weight:700;text-align:right;white-space:nowrap}
   .divider{height:1px;background:var(--line);margin:12px 0}
 
@@ -408,6 +646,49 @@
     margin-top:10px;
   }
   .secondaryBtn:active{opacity:.88}
+  /* Onboarding: true "button" look for skipping guided help */
+  .skipBtn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    padding:14px 14px;
+    border-radius:14px;
+
+    border:1px solid rgba(44,125,191,.35);
+    background:#fff;
+    color:var(--accent);
+
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+
+    box-shadow:0 10px 22px rgba(44,125,191,.12);
+
+    /* more space above, tighter below */
+    margin:18px 0 8px;
+  }
+
+  .skipBtn:hover{
+    border-color:rgba(44,125,191,.55);
+    box-shadow:0 14px 28px rgba(44,125,191,.16);
+  }
+  .skipBtn:active{transform:translateY(1px);opacity:.92}
+
+  /* When "none" is selected, make it clearly pressed/selected */
+  .skipBtn.active{
+    background:var(--accent);
+    color:#fff;
+    border-color:var(--accent);
+    box-shadow:0 16px 34px rgba(44,125,191,.22);
+  }
+
+  .skipBtn .skipBtnLabel{
+    line-height:1.2;
+    text-align:center;
+  }
 
   .microHint{
     font-size:12px;
@@ -416,6 +697,45 @@
     margin-top:8px;
     line-height:1.35;
     font-weight:600;
+  }
+  /* Onboarding not included row (shows after skipping) */
+  .obNoRow{
+    width:100%;
+    border:1px solid rgba(44,125,191,.22);
+    background:rgba(44,125,191,.06);
+    border-radius:14px;
+    padding:12px 12px;
+    box-shadow:0 10px 22px rgba(15,45,86,.06);
+    margin:10px 0 12px;
+  }
+  .obNoCheck{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:750;
+    color:#0b1b2b;
+    font-size:13px;
+    line-height:1.25;
+  }
+  .obNoCheck input{
+    width:18px;
+    height:18px;
+    accent-color:var(--accent);
+    margin:0;
+  }
+  .obNoText{
+    display:inline-block;
+  }
+  .obNoIcon{
+    width:18px;
+    height:18px;
+    flex:0 0 auto;
+    display:inline-block;
+  }
+  .obNoIcon svg{
+    width:100%;
+    height:100%;
+    display:block;
   }
 
   /* Simple centered CTA screen */
@@ -454,6 +774,123 @@
     z-index:10;
   }
   .toast.show{opacity:1;transform:translateY(0)}
+  /* Summary: "See features and credits you're getting" button */
+  .sumDetailBtn{
+    appearance:none;
+    border:1px solid rgba(44,125,191,.28);
+    background:rgba(44,125,191,.08);
+    color:#0b1b2b;
+    font-weight:700;
+    font-size:12px;
+    padding:8px 10px;
+    border-radius:999px;
+    cursor:pointer;
+    display:none; /* only shown when there is something to show */
+    line-height:1;
+  }
+  .sumDetailBtn:active{opacity:.88}
+  /* Summary: details row sits directly under Onboarding */
+  .sumDetailRow{
+    grid-column:1 / -1;     /* span both columns */
+    display:flex;
+    justify-content:flex-start;
+    margin-top:6px;
+  }
+
+  /* Summary details modal */
+  .sumModalOverlay{
+    position:absolute;
+    inset:0;
+    background:rgba(11,27,43,.55);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    padding:12px;
+    z-index:25;
+  }
+  .sumModalOverlay.show{display:flex}
+
+  .sumModalCard{
+    width:100%;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:22px;
+    box-shadow:0 18px 40px rgba(0,0,0,.18);
+    padding:16px;
+  }
+  .sumModalTop{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .sumModalTitle{
+    font-size:15px;
+    font-weight:700;
+    color:#0b1b2b;
+    line-height:1.25;
+  }
+  .sumModalClose{
+    width:36px;height:36px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#fff;
+    cursor:pointer;
+    display:grid;place-items:center;
+    color:#111;
+    flex:0 0 auto;
+  }
+  .sumModalClose svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+  .sumModalBody{
+    margin-top:12px;
+    border:1px solid rgba(44,125,191,.18);
+    background:rgba(44,125,191,.06);
+    border-radius:16px;
+    padding:12px;
+
+    /* scroll */
+    max-height:52vh;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  /* scrollbar styling */
+  .sumModalBody::-webkit-scrollbar{width:10px}
+  .sumModalBody::-webkit-scrollbar-track{background:rgba(0,0,0,.06);border-radius:999px}
+  .sumModalBody::-webkit-scrollbar-thumb{background:rgba(44,125,191,.35);border-radius:999px}
+  .sumModalBody::-webkit-scrollbar-thumb:hover{background:rgba(44,125,191,.50)}
+
+  .sumModalSection{
+    font-size:12px;
+    font-weight:700;
+    color:#64748b;
+    letter-spacing:.2px;
+    margin:10px 0 6px;
+  }
+  .sumModalSection:first-child{margin-top:0}
+  .sumModalList{
+    margin:0;
+    padding-left:18px;
+    color:#0b1b2b;
+    font-size:13px;
+    font-weight:650;
+    line-height:1.35;
+  }
+  .sumModalList li{margin:6px 0}
+
+    /* Onboarding screen: bring Continue closer to the skip button */
+  #screen-onboarding .primaryBtn{
+    margin-top:8px;
+  }
+  /* SUMMARY PRICING: make labels + prices red */
+  #screen-summary .summaryGrid .k.emph{
+    color:var(--priceRed) !important;
+  }
+  #screen-summary .summaryGrid .v#sumRecurring,
+  #screen-summary .summaryGrid .v#sumOnetime{
+    color:var(--priceRed) !important;
+  }
+
 </style>
 </head>
 
@@ -492,7 +929,7 @@
           <div class="backBtn" onclick="navBack()">
             <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
           </div>
-          <div class="title">Upgrade</div>
+          <div class="title">Upgrade Your Segwik Account</div>
         </div>
 
         <div class="content">
@@ -505,38 +942,152 @@
                 </svg>
               </div>
               <div class="lockMeta">
-                <div class="lockKicker">This feature needs</div>
+                <div class="lockKicker">This feature requires an upgrade to</div>
                 <div class="lockNeed" id="needText">—</div>
               </div>
             </div>
 
-            <div class="miniGrid">
-              <div class="miniStat">
-                <div class="k">Feature</div>
-                <div class="v" id="featureName">—</div>
-              </div>
+            <div class="miniGrid oneCol">
               <div class="miniStat">
                 <div class="k">Current subscription</div>
                 <div class="v" id="currentPlan">—</div>
               </div>
             </div>
           </div>
-
-
-          <div class="card" style="margin-top:6px;">
-            <div style="font-weight:700;color:#0b1b2b;">Pick what to enable</div>
-            <div class="mutedLine" style="margin-top:6px;">
-              Choose a capability set to unlock this feature.
+          <div class="bucket" id="bucket-grow" onclick="selectBucket('grow')">
+            <div class="bucketTop">
+              <div style="min-width:0;">
+                <div class="bucketTitle">Enable Grow capabilities</div>
+                <div class="bucketSub">Unlock the core tools most teams need day to day.</div>
+              </div>
+              <div class="radio" aria-hidden="true"><div class="dot"></div></div>
             </div>
 
-            <button class="primaryBtn" onclick="navTo('screen-capabilities')">Choose capabilities</button>
-            <button class="secondaryBtn" onclick="navBack()">Not now</button>
+            <div style="margin-top:10px;text-align:left;">
+              <button type="button" class="linkSmall" id="growFeaturesToggleBtn" onclick="event.stopPropagation(); toggleBucketFeatures('grow');">See full features</button>
+
+            </div>
+
+            <div class="featureList" id="growFeaturesList" style="display:none;">
+              <div class="feat">Everything in Segwik Start PLUS:</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Telecommunications Credit - 100 Credits</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Active Connections Credits - 500 Credits</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> User Credits - 5 Credits</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Segwik CORE Desktop</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Relationship Manager 360º Plus</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> AI Customer Journey Manager</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> AI Productivity Feed</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Advanced Meetings Module</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Calendar Booker</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Business Card Scanner</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Mass Email Blasting System</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> AI Content Generator</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Smart Conversations Manager</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Google Calendar Sync</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Segwik Marketplace</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Basic Segwik Email Sending</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Account Customization</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Contact Personalization</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Call Transcription</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Integration Setup</div>
+            </div>
+
+
+
           </div>
+
+          <div class="bucket pro" id="bucket-pro" onclick="togglePro()">
+            <div class="bucketTop">
+              <div style="min-width:0;">
+                <div class="bucketTitle">Add Pro capabilities</div>
+                <div class="bucketSub">Layer in advanced controls and automation.</div>
+              </div>
+              <div class="toggle" id="proToggle" role="switch" aria-checked="false"></div>
+            </div>
+
+            <div style="margin-top:10px;text-align:left;">
+              <button type="button" class="linkSmall" id="proFeaturesToggleBtn" onclick="event.stopPropagation(); toggleBucketFeatures('pro');">See full features</button>
+
+            </div>
+
+            <div class="featureList" id="proFeaturesList" style="display:none;margin-top:12px;" onclick="event.stopPropagation();">
+              <div class="feat">Everything in Grow PLUS:</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Telecommunications Credit - 250 Credits</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Active Connections Credits - 500 Credits</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> User Credits - 15 Credits</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Optional “Micro Kits” / Add-On Blocks</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Secure Customer Portal</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Advanced Content Manager</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> SMS Texting Compliance Setup</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Text Blast Module</div>
+              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> CRM Technology & AI Foundations</div>
+            </div>
+
+
+
+          </div>
+
+          <button class="primaryBtn" id="capContinue" onclick="navTo('screen-onboarding')">
+            Continue
+          </button>
+
+          <div class="microHint" id="capHint">Select Grow to continue.</div>
+
+          <div class="card" id="fullFeaturesLocked" style="display:none;" hidden>
+
+
+
+
+            <div class="featurePanel" style="margin-top:0;">
+              <div class="featurePanelTitle">Segwik Grow</div>
+              <div class="featurePanelSub">Everything in Segwik Start PLUS:</div>
+              <ul class="featureBullets">
+                <li>Telecommunications Credit - 100 Credits</li>
+                <li>Active Connections Credits - 500 Credits</li>
+                <li>User Credits - 5 Credits</li>
+                <li>Segwik CORE Desktop</li>
+                <li>Relationship Manager 360º Plus</li>
+                <li>AI Customer Journey Manager</li>
+                <li>AI Productivity Feed</li>
+                <li>Advanced Meetings Module</li>
+                <li>Calendar Booker</li>
+                <li>Business Card Scanner</li>
+                <li>Mass Email Blasting System</li>
+                <li>AI Content Generator</li>
+                <li>Smart Conversations Manager</li>
+                <li>Google Calendar Sync</li>
+                <li>Segwik Marketplace</li>
+                <li>Basic Segwik Email Sending</li>
+                <li>Account Customization</li>
+                <li>Contact Personalization</li>
+                <li>Call Transcription</li>
+                <li>Integration Setup</li>
+              </ul>
+            </div>
+
+            <div class="featurePanel" style="margin-top:12px;">
+              <div class="featurePanelTitle">Pro</div>
+              <div class="featurePanelSub">Everything in Grow PLUS:</div>
+              <ul class="featureBullets">
+                <li>Telecommunications Credit - 250 Credits</li>
+                <li>Active Connections Credits - 500 Credits</li>
+                <li>User Credits - 15 Credits</li>
+                <li>Optional “Micro Kits” / Add-On Blocks</li>
+                <li>Secure Customer Portal</li>
+                <li>Advanced Content Manager</li>
+                <li>SMS Texting Compliance Setup</li>
+                <li>Text Blast Module</li>
+                <li>CRM Technology &amp; AI Foundations</li>
+              </ul>
+            </div>
+          </div>
+
+
         </div>
       </div>
 
       <!-- Screen 3: Capabilities selection (no pricing copy anywhere) -->
-      <div class="screen off-right hidden" id="screen-capabilities" aria-hidden="true">
+      <div class="screen off-right hidden" id="screen-capabilities" aria-hidden="true" hidden>
         <div class="topbar">
           <div class="backBtn" onclick="navBack()">
             <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
@@ -557,7 +1108,7 @@
           </div>
 
 
-          <div class="bucket" id="bucket-grow" onclick="selectBucket('grow')">
+          <div class="bucket" id="bucket-grow">
             <div class="bucketTop">
               <div style="min-width:0;">
                 <div class="bucketTitle">Enable Grow capabilities</div>
@@ -603,7 +1154,7 @@
           <button class="primaryBtn" id="capContinue" onclick="navTo('screen-onboarding')" disabled>
             Continue
           </button>
-          <div class="microHint" id="capHint">Select Grow to continue.</div>
+          <div class="microHint" id="capHint"></div>
         </div>
       </div>
 
@@ -632,28 +1183,29 @@
             </div>
           </div>
 
-          <div class="choiceCard" id="ob-none" onclick="selectOnboarding('none')">
-            <div class="choiceTop">
-              <div style="min-width:0;">
-                <div class="choiceTitle">Continue without onboarding</div>
-                <div class="choiceSub">You can enable features now and set up at your own pace.</div>
-              </div>
-              <div class="radio" aria-hidden="true"><div class="dot"></div></div>
-            </div>
-          </div>
-
-          <div class="choiceCard" id="ob-launch" onclick="selectOnboarding('launch')">
+          <div class="choiceCard disabled" id="ob-launch" onclick="lockedLaunchOnboarding()">
             <div class="choiceTop">
               <div style="min-width:0;">
                 <div class="choiceTitle">Segwik Launch Experience</div>
-                <div class="choiceSub">We set up your workspace, map key workflows, and launch you with momentum.</div>
+                <div class="choiceSub">Best for Segwik Start</div>
               </div>
-              <div class="badge">Recommended</div>
+              <div class="badge">Best for Segwik Start</div>
             </div>
-            <div class="featureList" style="margin-top:12px;">
-              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Workspace setup and configuration</div>
-              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Workflow mapping and checklist buildout</div>
-              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Guided launch and best-practice structure</div>
+
+            <div class="obMetaRow">
+              <button type="button" class="obToggleBtn" id="obLaunchToggleBtn" onclick="event.stopPropagation(); toggleOnboardingFeatures('launch');">See more</button>
+              <div class="radio" aria-hidden="true"><div class="dot"></div></div>
+            </div>
+
+            <div class="obFeatures featureList" id="obLaunchFeatures">
+
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> 90-Minute 1:1 Success Training</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Professional Interactive eCard Setup</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Contact &amp; Phone Import</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Public Meeting Booker Configuration</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Core Journeys &amp; Follow-Up Automation</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> 30-Day Success Check-In</div>
+              
             </div>
           </div>
 
@@ -661,34 +1213,76 @@
             <div class="choiceTop">
               <div style="min-width:0;">
                 <div class="choiceTitle">Segwik Growth Accelerator</div>
-                <div class="choiceSub">We optimize your workspace, clean up structure, and build what you need to scale faster.</div>
+                <div class="choiceSub">Best for Segwik Grow</div>
               </div>
+              <div class="badge">Best for Segwik Grow</div>
+            </div>
+
+            <div class="obMetaRow">
+              <button type="button" class="obToggleBtn" id="obGrowthToggleBtn" onclick="event.stopPropagation(); toggleOnboardingFeatures('growth');">See more</button>
               <div class="radio" aria-hidden="true"><div class="dot"></div></div>
             </div>
-            <div class="featureList" style="margin-top:12px;">
-              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Advanced workflow structure + templates</div>
-              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Roles, permissions, and rollout planning</div>
-              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Reporting-ready setup and scale recommendations</div>
+
+            <div class="obFeatures featureList" id="obGrowthFeatures">
+
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Basic Account Customization</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Custom Personas</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Event Publishing</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Sales &amp; Discovery Meeting Setup</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Meeting Customization &amp; Additional Training</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Journey Customization</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Email Blast Setup</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Content Generation Training</div>
+              
             </div>
           </div>
-
 
           <div class="choiceCard" id="ob-custom" onclick="selectOnboarding('custom')">
             <div class="choiceTop">
               <div style="min-width:0;">
-                <div class="choiceTitle">Custom Setup</div>
-                <div class="choiceSub">More involved buildout for teams with multiple workstreams and roles.</div>
+                <div class="choiceTitle">Segwik Pro White-Glove Setup</div>
+                <div class="choiceSub">Best for Segwik Pro</div>
               </div>
+              <div class="badge">Best for Segwik Pro</div>
+            </div>
+
+            <div class="obMetaRow">
+              <button type="button" class="obToggleBtn" id="obCustomToggleBtn" onclick="event.stopPropagation(); toggleOnboardingFeatures('custom');">See more</button>
               <div class="radio" aria-hidden="true"><div class="dot"></div></div>
             </div>
-            <div class="featureList" style="margin-top:12px;">
-              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Custom fields, roles, and templates</div>
-              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Advanced workflow design and rollout</div>
-              <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Team enablement and handoff</div>
+
+            <div class="obFeatures featureList" id="obCustomFeatures">
+
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Everything in Growth Accelerator</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Multi-User &amp; Permissions Setup</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Advanced CRM &amp; Industry Modules</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Client Portal Configuration</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Advanced Telecom Systems</div>
+                <div class="feat"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Quarterly Training Alignment</div>
+              </div>
+
+          </div>
+
+
+          <div class="obNoRow" id="obNoRow" style="display:none;">
+            <div class="obNoCheck">
+              <span class="obNoIcon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img" focusable="false" aria-hidden="true">
+                  <path d="M8.6 2.8h6.8l5.8 5.8v6.8l-5.8 5.8H8.6L2.8 15.4V8.6L8.6 2.8z" fill="#dc2626"/>
+                  <path d="M9 9l6 6M15 9l-6 6" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="obNoText">Onboarding not included</span>
             </div>
           </div>
 
+
+          <button type="button" class="skipBtn" id="ob-none" onclick="openNoOnboardingPrompt()">
+            <span class="skipBtnLabel">I'd prefer to continue without guided assistance</span>
+          </button>
+
           <button class="primaryBtn" onclick="navTo('screen-summary')">Continue</button>
+
         </div>
       </div>
 
@@ -705,17 +1299,6 @@
           <div class="heroCard" style="margin-top:2px;">
             <div style="font-size:15px;font-weight:700;color:#0b1b2b;">Review and confirm</div>
             <div class="mutedLine" style="margin-top:8px;">Confirm what will be enabled for this feature.</div>
-
-            <div class="miniGrid" style="margin-top:12px;">
-              <div class="miniStat">
-                <div class="k">Feature</div>
-                <div class="v" id="sumFeaturePill">—</div>
-              </div>
-              <div class="miniStat">
-                <div class="k">Current subscription</div>
-                <div class="v" id="sumCurrentPlan">—</div>
-              </div>
-            </div>
           </div>
 
           <div class="card">
@@ -729,7 +1312,17 @@
               <div class="v" id="sumPro">Off</div>
 
               <div class="k">Onboarding</div>
-              <div class="v" id="sumOnboarding">None</div>
+              <div class="v">
+                <span id="sumOnboarding">None</span>
+              </div>
+
+              <div class="sumDetailRow" id="sumDetailRow">
+                <button type="button" class="sumDetailBtn" id="sumDetailBtn" onclick="openSummaryDetails()">
+                  See features and credits you're getting
+                </button>
+              </div>
+
+
             </div>
 
             <div class="divider"></div>
@@ -737,17 +1330,18 @@
             <div class="sectionTitle" style="margin:0 0 8px;"><span class="dot"></span>Pricing</div>
 
             <div class="summaryGrid">
-              <div class="k">Recurring (monthly)</div>
+              <div class="k emph">Recurring (monthly)</div>
               <div class="v" id="sumRecurring">$0</div>
 
-              <div class="k">One-time onboarding</div>
+              <div class="k emph">One-time onboarding</div>
               <div class="v" id="sumOnetime">$0</div>
             </div>
+
 
             <button class="primaryBtn" id="confirmBtn" onclick="confirmUpgrade()">Confirm upgrade</button>
             <button class="secondaryBtn" onclick="navBack()">Go back</button>
 
-            <div class="microHint" id="confirmHint">Your changes apply immediately.</div>
+            <div class="microHint" id="confirmHint">Your changes apply immediately after check-out</div>
           </div>
         </div>
       </div>
@@ -777,6 +1371,44 @@
         More
       </div>
     </div>
+        <!-- Summary details modal -->
+    <div class="sumModalOverlay" id="sumDetailsModal" aria-hidden="true">
+      <div class="sumModalCard">
+        <div class="sumModalTop">
+          <div class="sumModalTitle">What you’re getting</div>
+          <button type="button" class="sumModalClose" onclick="closeSummaryDetails()" aria-label="Close">
+            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </div>
+
+        <div class="sumModalBody" id="sumDetailsBody">
+          <!-- Filled by JS -->
+        </div>
+
+        <button class="primaryBtn" style="margin-top:12px;" onclick="closeSummaryDetails()">Done</button>
+      </div>
+    </div>
+
+    <div class="modalOverlay" id="noOnboardingModal" aria-hidden="true">
+      <div class="modalCard">
+        <div class="modalTitle">Hey — quick check.</div>
+        <div class="modalSub">
+          If you skip guided onboarding, you’ll still be fine — but most people get value faster with help.
+        </div>
+
+        <div class="modalOptions">
+          <div class="modalOption"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Get started FAST with Segwik implementation and support services.</div>
+          <div class="modalOption"><span class="check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> We’ll tailor it to your exact workflow so you don’t waste time</div>
+        </div>
+
+        <button class="primaryBtn" style="margin-top:12px;" onclick="keepOnboarding()">
+          Keep guided onboarding
+        </button>
+        <button class="secondaryBtn" onclick="confirmNoOnboarding()">
+          Continue without help
+        </button>
+      </div>
+    </div>
 
     <div class="toast" id="toast"></div>
   </div>
@@ -796,7 +1428,8 @@
 
     selectedPlan: null,    // "Grow"
     proEnabled: false,     // boolean
-    onboarding: "none",    // "none" | "launch" | "growth" | "custom"
+    onboarding: "growth",    // "none" | "launch" | "growth" | "custom"
+
 
 
     prices: {
@@ -816,6 +1449,8 @@
   function navTo(id){
     const fromId = stack[stack.length - 1];
     if(fromId === id) return;
+    if(id === "screen-capabilities") id = "screen-locked";
+
 
     const from = byId(fromId);
     const to = byId(id);
@@ -872,31 +1507,108 @@
   }
 
   /* ---------- Entry / Locked screen ---------- */
+  function toggleFullFeatures(){
+    const panel = document.getElementById("fullFeaturesLocked");
+    if(!panel) return;
+
+    const btn = document.getElementById("fullFeaturesToggleBtn");
+
+    const isHidden = (panel.style.display === "none" || panel.style.display === "");
+    panel.style.display = isHidden ? "block" : "none";
+
+    if(btn){
+      btn.textContent = isHidden ? "Hide list" : "See full features";
+    }
+
+    if(isHidden){
+      setTimeout(()=> panel.scrollIntoView({behavior:"smooth", block:"start"}), 0);
+    }
+  }
+  function toggleBucketFeatures(which){
+    const listId = (which === "pro") ? "proFeaturesList" : "growFeaturesList";
+    const btnId  = (which === "pro") ? "proFeaturesToggleBtn" : "growFeaturesToggleBtn";
+
+    const panel = document.getElementById(listId);
+    const btn = document.getElementById(btnId);
+    if(!panel || !btn) return;
+
+    const isHidden = (panel.style.display === "none" || panel.style.display === "");
+    panel.style.display = isHidden ? "block" : "none";
+    btn.textContent = isHidden ? "Hide list" : "See full features";
+
+    if(isHidden){
+      setTimeout(()=> panel.scrollIntoView({behavior:"smooth", block:"start"}), 0);
+    }
+  }
+
+  function quickSelectGrow(){
+    // Same behavior as choosing Grow, but now selection happens on the Upgrade screen
+    state.selectedPlan = "Grow";
+    setBucketUI("grow");
+    setCapContinueState();
+    navTo("screen-locked");
+  }
+
+  function quickSelectGrowAndShowFeatures(){
+    // Grow is mandatory. Show Grow features list inside the Grow bucket.
+    state.selectedPlan = "Grow";
+    setBucketUI("grow");
+    setCapContinueState();
+
+    const panel = document.getElementById("growFeaturesList");
+    const btn = document.getElementById("growFeaturesToggleBtn");
+
+    if(panel) panel.style.display = "block";
+    if(btn) btn.textContent = "Hide list";
+
+    if(panel){
+      setTimeout(()=> panel.scrollIntoView({behavior:"smooth", block:"start"}), 0);
+    }
+  }
+
+
+
+
   function openLocked(featureName, needsPlan){
     state.featureName = featureName || state.featureName;
     state.needsPlan = needsPlan || state.needsPlan;
 
-    // clean slate per attempt
-    state.selectedPlan = null;
+    // clean slate per attempt (Grow is mandatory)
+    state.selectedPlan = "Grow";
     state.proEnabled = false;
-    state.onboarding = "none";
+    state.onboarding = "growth";
+
+
 
     // locked screen copy
-    document.getElementById("featureName").textContent = state.featureName;
-    document.getElementById("needText").textContent = state.needsPlan;
+    const fn = document.getElementById("featureName");
+    if(fn) fn.textContent = state.featureName;
+    const needEl = document.getElementById("needText");
+    needEl.innerHTML = '<button type="button" class="planLinkBtn" onclick="quickSelectGrowAndShowFeatures()">Segwik ' + state.needsPlan + '</button>';
+
+
+    const full = document.getElementById("fullFeaturesLocked");
+    if(full) full.style.display = "none";
+    const ffBtn = document.getElementById("fullFeaturesToggleBtn");
+    if(ffBtn) ffBtn.textContent = "See full features";
+
     document.getElementById("currentPlan").textContent = state.currentPlan;
+    // capabilities hero stats (screen may not be used)
+    const capF = document.getElementById("capFeature");
+    if(capF) capF.textContent = state.featureName;
+    const capP = document.getElementById("capCurrentPlan");
+    if(capP) capP.textContent = state.currentPlan;
 
-    // capabilities hero stats
-    document.getElementById("capFeature").textContent = state.featureName;
-    document.getElementById("capCurrentPlan").textContent = state.currentPlan;
 
-    // reset UI
-    setBucketUI(null);
+    // reset UI (Grow mandatory)
+    setBucketUI("grow");
     setProUI(false);
     setCapContinueState();
 
+
     // reset onboarding UI
-    setOnboardingUI("none");
+    setOnboardingUI("growth");
+
 
     // go
     navTo("screen-locked");
@@ -905,9 +1617,11 @@
   /* ---------- Capabilities selection ---------- */
   function setBucketUI(which){
     const grow = document.getElementById("bucket-grow");
+    if(!grow) return;
     if(which === "grow") grow.classList.add("active");
     else grow.classList.remove("active");
   }
+
 
   function setProUI(on){
     const t = document.getElementById("proToggle");
@@ -916,35 +1630,40 @@
     state.proEnabled = !!on;
 
     if(state.proEnabled){
-      t.classList.add("on");
-      t.setAttribute("aria-checked","true");
-      status.textContent = "On";
-      bucket.classList.add("active");
+      if(t) { t.classList.add("on"); t.setAttribute("aria-checked","true"); }
+      if(status) status.textContent = "Enabled";
+      if(bucket) bucket.classList.add("active");
     } else {
-      t.classList.remove("on");
-      t.setAttribute("aria-checked","false");
-      status.textContent = "Off";
-      bucket.classList.remove("active");
+      if(t) { t.classList.remove("on"); t.setAttribute("aria-checked","false"); }
+      if(status) status.textContent = "Off";
+      if(bucket) bucket.classList.remove("active");
     }
   }
+
+
 
 
   function setCapContinueState(){
     const btn = document.getElementById("capContinue");
     const hint = document.getElementById("capHint");
-    const ok = (state.selectedPlan === "Grow");
-    btn.disabled = !ok;
-    hint.textContent = ok ? "" : "Select Grow to continue.";
+    if(btn) btn.disabled = false;
+    if(hint) hint.textContent = "";
   }
 
   function selectBucket(which){
     if(which === "grow"){
+      // If they click Grow while it's already selected, treat it as "trying to disable"
+      if(state.selectedPlan === "Grow"){
+        toast("Grow is required to upgrade.");
+        return;
+      }
+
       state.selectedPlan = "Grow";
       setBucketUI("grow");
       setCapContinueState();
-      toast("Grow selected");
     }
   }
+
 
   function togglePro(){
     if(state.selectedPlan !== "Grow"){
@@ -953,8 +1672,60 @@
     }
     setProUI(!state.proEnabled);
   }
+  /* ---------- Onboarding UI helpers ---------- */
+  function toggleOnboardingFeatures(which){
+    const map = {
+      launch: { panelId:"obLaunchFeatures", btnId:"obLaunchToggleBtn" },
+      growth: { panelId:"obGrowthFeatures", btnId:"obGrowthToggleBtn" },
+      custom: { panelId:"obCustomFeatures", btnId:"obCustomToggleBtn" }
+    };
+
+    const entry = map[which];
+    if(!entry) return;
+
+    const panel = document.getElementById(entry.panelId);
+    const btn = document.getElementById(entry.btnId);
+    if(!panel || !btn) return;
+
+    const isHidden = (panel.style.display === "none" || panel.style.display === "");
+    panel.style.display = isHidden ? "block" : "none";
+    btn.textContent = isHidden ? "Hide list" : "See full features";
+
+    if(isHidden){
+      setTimeout(()=> panel.scrollIntoView({behavior:"smooth", block:"start"}), 0);
+    }
+  }
+
+  function openNoOnboardingPrompt(){
+    const modal = document.getElementById("noOnboardingModal");
+    if(!modal) return;
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden","false");
+  }
+
+  function closeNoOnboardingPrompt(){
+    const modal = document.getElementById("noOnboardingModal");
+    if(!modal) return;
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden","true");
+  }
+
+  function keepOnboarding(){
+    closeNoOnboardingPrompt();
+    toast("Good call — we’ll keep it guided.");
+  }
+
+  function confirmNoOnboarding(){
+    closeNoOnboardingPrompt();
+    setOnboardingUI("none");
+    toast("Okay — continuing without onboarding");
+  }
 
   /* ---------- Onboarding selection ---------- */
+    function lockedLaunchOnboarding(){
+    toast("This package is only for Segwik free users.");
+  }
+
   function setOnboardingUI(which){
     state.onboarding = which;
 
@@ -964,37 +1735,53 @@
       const el = document.getElementById("ob-"+x);
       if(!el) return;
       el.classList.remove("active");
-      const radio = el.querySelector(".radio");
-      if(radio){
-        radio.style.borderColor = "#cbd5e1";
-        radio.querySelector(".dot").style.background = "transparent";
-      }
     });
 
-
     const chosen = document.getElementById("ob-"+which);
-    chosen.classList.add("active");
+    if(chosen) chosen.classList.add("active");
 
-    const radio = chosen.querySelector(".radio");
-    if(radio){
-      radio.style.borderColor = "rgba(44,125,191,.65)";
-      radio.querySelector(".dot").style.background = "var(--accent)";
+    // Toggle the "skip" button vs the "not included" row
+    const noBtn = document.getElementById("ob-none");
+    const noRow = document.getElementById("obNoRow");
+    if(noBtn && noRow){
+      if(which === "none"){
+        noBtn.style.display = "none";
+        noRow.style.display = "block";
+      } else {
+        noBtn.style.display = "flex";
+        noRow.style.display = "none";
+      }
     }
 
     document.getElementById("obPlanLabel").textContent = (state.selectedPlan || "—");
-    document.getElementById("obProLabel").textContent = state.proEnabled ? "On" : "Off";
+    document.getElementById("obProLabel").textContent = state.proEnabled ? "Enabled" : "Off";
   }
 
+
+
   function selectOnboarding(which){
+    if(which === "none"){
+      openNoOnboardingPrompt();
+      return;
+    }
+
+    // Launch is visible but not selectable in this upgrade flow
+    if(which === "launch"){
+      toast("This package is only for Segwik free users.");
+      return;
+    }
+
     setOnboardingUI(which);
+
     const label =
-      (which === "none") ? "No onboarding" :
       (which === "launch") ? "Launch Experience" :
       (which === "growth") ? "Growth Accelerator" :
-      "Custom Setup";
+      "White-Glove Setup";
 
     toast(label);
   }
+
+
 
   /* ---------- Summary + pricing ---------- */
   function money(n){
@@ -1010,17 +1797,14 @@
   }
 
   function renderSummary(){
-    document.getElementById("sumFeaturePill").textContent = state.featureName;
-    document.getElementById("sumCurrentPlan").textContent = state.currentPlan;
-
     document.getElementById("sumNewPlan").textContent = state.selectedPlan || "—";
-    document.getElementById("sumPro").textContent = state.proEnabled ? "On" : "Off";
+    document.getElementById("sumPro").textContent = state.proEnabled ? "Enabled" : "Off";
 
     const obLabel =
       (state.onboarding === "none") ? "None" :
       (state.onboarding === "launch") ? "Segwik Launch Experience" :
       (state.onboarding === "growth") ? "Segwik Growth Accelerator" :
-      "Custom Setup";
+      "Segwik Pro White-Glove Setup";
 
     document.getElementById("sumOnboarding").textContent = obLabel;
 
@@ -1029,14 +1813,31 @@
 
     document.getElementById("sumRecurring").textContent = money(recurring);
     document.getElementById("sumOnetime").textContent = money(onetime);
+
+    // Show/hide the details button based on whether there's anything meaningful to show
+    const btn = document.getElementById("sumDetailBtn");
+    const row = document.getElementById("sumDetailRow");
+    if(btn){
+      const hasPlan = !!state.selectedPlan;
+      const hasPro = !!state.proEnabled;
+      const hasOnboarding = (state.onboarding && state.onboarding !== "none");
+      const show = (hasPlan || hasPro || hasOnboarding);
+
+      btn.style.display = show ? "inline-flex" : "none";
+      if(row) row.style.display = show ? "flex" : "none";
+    }
+
   }
+
+
+
 
   // hook render on summary nav
   const _navTo = navTo;
   navTo = function(id){
     if(id === "screen-onboarding"){
       document.getElementById("obPlanLabel").textContent = (state.selectedPlan || "—");
-      document.getElementById("obProLabel").textContent = state.proEnabled ? "On" : "Off";
+      document.getElementById("obProLabel").textContent = state.proEnabled ? "Enabled" : "Off";
     }
     if(id === "screen-summary"){
       renderSummary();
@@ -1045,6 +1846,117 @@
   };
 
   /* ---------- Confirm ---------- */
+    /* ---------- Summary details modal ---------- */
+  function openSummaryDetails(){
+    const modal = document.getElementById("sumDetailsModal");
+    const body = document.getElementById("sumDetailsBody");
+    if(!modal || !body) return;
+
+    body.innerHTML = buildSummaryDetailsHTML();
+
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden","false");
+  }
+
+  function closeSummaryDetails(){
+    const modal = document.getElementById("sumDetailsModal");
+    if(!modal) return;
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden","true");
+  }
+
+  function buildSummaryDetailsHTML(){
+    const parts = [];
+
+    // Plan features / credits (we’ll reuse your locked-screen lists)
+    const hasGrow = (state.selectedPlan === "Grow");
+    const hasPro = !!state.proEnabled;
+
+    if(hasGrow){
+      parts.push('<div class="sumModalSection">Subscription: Segwik Grow</div>');
+      parts.push(listFromDOM("growFeaturesList") || '<ul class="sumModalList"><li>Grow capabilities enabled.</li></ul>');
+    }
+
+    if(hasPro){
+      parts.push('<div class="sumModalSection">Add-on: Pro capabilities</div>');
+      parts.push(listFromDOM("proFeaturesList") || '<ul class="sumModalList"><li>Pro capabilities enabled.</li></ul>');
+    }
+
+    // Onboarding details (ONLY if included)
+    if(state.onboarding && state.onboarding !== "none"){
+      const obName =
+        (state.onboarding === "launch") ? "Segwik Launch Experience" :
+        (state.onboarding === "growth") ? "Segwik Growth Accelerator" :
+        "Segwik Pro White-Glove Setup";
+
+      const obListId =
+        (state.onboarding === "launch") ? "obLaunchFeatures" :
+        (state.onboarding === "growth") ? "obGrowthFeatures" :
+        "obCustomFeatures";
+
+      parts.push('<div class="sumModalSection">Onboarding: ' + obName + '</div>');
+      parts.push(listFromDOM(obListId) || '<ul class="sumModalList"><li>Guided onboarding included.</li></ul>');
+    }
+
+    if(parts.length === 0){
+      return '<ul class="sumModalList"><li>No details available.</li></ul>';
+    }
+
+    return parts.join("");
+  }
+
+  function listFromDOM(containerId){
+    const el = document.getElementById(containerId);
+    if(!el) return "";
+
+    // Collect lines from your ".feat" rows (strip the icon)
+    const rows = Array.from(el.querySelectorAll(".feat")).map(row=>{
+      const clone = row.cloneNode(true);
+      const icon = clone.querySelector(".check");
+      if(icon) icon.remove();
+      const text = (clone.textContent || "").replace(/\s+/g," ").trim();
+      return text;
+    }).filter(Boolean);
+
+    if(rows.length === 0) return "";
+
+    // If the first row is an "Everything in ... PLUS:" style line,
+    // render it as a paragraph instead of a bullet.
+    const first = rows[0] || "";
+    const isPlusHeader =
+      /^Everything in\b/i.test(first) ||
+      /PLUS:\s*$/i.test(first);
+
+    if(isPlusHeader){
+      const rest = rows.slice(1);
+
+      const headerHTML =
+        '<div style="font-size:13px;font-weight:750;color:#0b1b2b;line-height:1.35;margin:0 0 8px;">'
+        + escapeHTML(first)
+        + '</div>';
+
+      const listHTML =
+        (rest.length > 0)
+          ? ('<ul class="sumModalList">' + rest.map(t=>'<li>'+escapeHTML(t)+'</li>').join("") + '</ul>')
+          : '';
+
+      return headerHTML + listHTML;
+    }
+
+    // Default: bullets only
+    return '<ul class="sumModalList">' + rows.map(t=>'<li>'+escapeHTML(t)+'</li>').join("") + '</ul>';
+  }
+
+
+  function escapeHTML(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
   function confirmUpgrade(){
     const btn = document.getElementById("confirmBtn");
     const hint = document.getElementById("confirmHint");
@@ -1088,11 +2000,13 @@
     // clean slate (keep currentPlan updated)
     state.selectedPlan = null;
     state.proEnabled = false;
-    state.onboarding = "none";
+    state.onboarding = "growth";
+
     setBucketUI(null);
     setProUI(false);
     setCapContinueState();
-    setOnboardingUI("none");
+    setOnboardingUI("growth");
+
   }
 
   /* ---------- Init ---------- */
