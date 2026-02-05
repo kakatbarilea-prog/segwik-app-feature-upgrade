@@ -1636,7 +1636,7 @@
       if(bucket) bucket.classList.add("active");
     } else {
       if(t) { t.classList.remove("on"); t.setAttribute("aria-checked","false"); }
-      if(status) status.textContent = "Off";
+      if(status) status.textContent = "Disabled";
       if(bucket) bucket.classList.remove("active");
     }
   }
@@ -1755,7 +1755,7 @@
     }
 
     document.getElementById("obPlanLabel").textContent = (state.selectedPlan || "—");
-    document.getElementById("obProLabel").textContent = state.proEnabled ? "Enabled" : "Off";
+    document.getElementById("obProLabel").textContent = state.proEnabled ? "Enabled" : "Disabled";
   }
 
 
@@ -1799,7 +1799,7 @@
 
   function renderSummary(){
     document.getElementById("sumNewPlan").textContent = state.selectedPlan || "—";
-    document.getElementById("sumPro").textContent = state.proEnabled ? "Enabled" : "Off";
+    document.getElementById("sumPro").textContent = state.proEnabled ? "Enabled" : "Disabled";
 
     const obLabel =
       (state.onboarding === "none") ? "None" :
@@ -1838,7 +1838,7 @@
   navTo = function(id){
     if(id === "screen-onboarding"){
       document.getElementById("obPlanLabel").textContent = (state.selectedPlan || "—");
-      document.getElementById("obProLabel").textContent = state.proEnabled ? "Enabled" : "Off";
+      document.getElementById("obProLabel").textContent = state.proEnabled ? "Enabled" : "Disabled";
     }
     if(id === "screen-summary"){
       renderSummary();
